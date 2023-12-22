@@ -51,6 +51,32 @@ async function run() {
       res.send(result)
     })
 
+    app.put("/task/:id", async(req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id) }
+      const updatedData = req.body;
+      const result = await Tasks.findOneAndUpdate(filter, {
+        $set: {
+          title: updatedData?.title,
+          desc: updatedData?.desc,
+          priority: updatedData?.priority,
+          deadlines: updatedData?.deadlines,
+        }
+      })
+      res.send(result)
+    })
+
+    app.put("/taskConplate/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const result = await Tasks.findOneAndUpdate(filter, {
+        $set: {
+          status: "completedTasks"
+        }
+      })
+      res.send(result)
+    })
+
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // await client.close();
